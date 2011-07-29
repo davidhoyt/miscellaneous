@@ -1,6 +1,6 @@
 = fibonacci-gem
 
-Description goes here.
+Provides functions for working with Fibonacci sequences.
 
 == Contributing to fibonacci-gem
  
