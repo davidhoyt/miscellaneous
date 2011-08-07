@@ -310,9 +310,10 @@ public final class CashRegister {
 	
 	/**
 	 * Make a sale.
+	 * 
 	 * @param cost How much the sale item cost in base denomination units (e.g. "penny" in the U.S.).
 	 * @param amount_tendered The amount the customer offered to pay for the sale item in base denomination units (e.g. "penny" in the U.S.).
-	 * @return The change with the 
+	 * @return The change.
 	 */
 	public CoinBundle sale(long cost, long amount_tendered) {
 		if (cost < 0L)
