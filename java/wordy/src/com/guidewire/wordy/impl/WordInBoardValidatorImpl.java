@@ -9,7 +9,7 @@ import com.guidewire.wordy.util.ArgCheck;
  * in all directions for tiles/cells that match the word letter-by-letter. You 
  * cannot repeat or reuse tiles you've already visited. For more information, please 
  * see the documentation for validateWord().
- * 
+ * <br /><br />
  * This class is NOT thread-safe.
  * 
  * @author David Hoyt <dhoyt@hoytsoft.org>
@@ -17,6 +17,11 @@ import com.guidewire.wordy.util.ArgCheck;
 public final class WordInBoardValidatorImpl implements IWordInBoardValidator {
 	//<editor-fold defaultstate="collapsed" desc="Variables">
 	private boolean[][] visited = new boolean[IBoard.BOARD_COLUMNS][IBoard.BOARD_ROWS];
+	//</editor-fold>
+	
+	//<editor-fold defaultstate="collapsed" desc="Initialization">
+	public WordInBoardValidatorImpl() {
+	}
 	//</editor-fold>
 	
 	//<editor-fold defaultstate="collapsed" desc="Utilities">
@@ -37,6 +42,7 @@ public final class WordInBoardValidatorImpl implements IWordInBoardValidator {
 	public boolean isWordInBoard(IBoard board, String word) {
 		//<editor-fold defaultstate="collapsed" desc="Validate and initialize parameters">
 		ArgCheck.nonNull(word, "word");
+		ArgCheck.nonNull(board, "board");
 		
 		word = word.trim().toUpperCase();
 		int len = word.length();
@@ -84,7 +90,7 @@ public final class WordInBoardValidatorImpl implements IWordInBoardValidator {
 	 *  <li>
 	 *		You could potentially eliminate many of the recursion issues through tail recursion 
 	 *		or a stack-based solution. But in terms of simplicity and being able to read and 
-	 *		understand, this one seemed best.<br /><br />
+	 *		understand the code, this one seemed best.<br /><br />
 	 *	</li>
 	 *  <li>
 	 *		It recurses more than it has to. We could evaluate some of the conditions before 
@@ -111,10 +117,10 @@ public final class WordInBoardValidatorImpl implements IWordInBoardValidator {
 			return true;
 		
 		int proposed_x, proposed_y;
-		visited[x][y] = true;
 		
 		// Examine the cells all around the current one. Using the nested loop 
 		// just helps to compact the code a bit.
+		visited[x][y] = true;
 		for(int i = -1; i <= 1; ++i) {
 			for(int j = -1; j <= 1; ++j) {
 				if (i == 0 && j == 0)

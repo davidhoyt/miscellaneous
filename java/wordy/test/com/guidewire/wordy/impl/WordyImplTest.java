@@ -14,25 +14,6 @@ import java.util.List;
 
 public class WordyImplTest extends TestCase {
 	//<editor-fold defaultstate="collapsed" desc="Utilities">
-	private static final List<String> COMPLETE_WORD_LIST = createCompleteWordList();
-	private static List<String> createCompleteWordList() {
-		try {
-			final List<String> lst = new ArrayList<String>(114000);
-
-			FileUtil.readLines(new File("CROSSWD.TXT"), new LineBlock() {
-				@Override
-				public boolean run(String line) {
-					lst.add(StringUtil.normalizeWord(line));
-					return true;
-				}
-			});
-
-			return lst;
-		} catch(IOException e) {
-			return null;
-		}
-	}
-	
 	private static WordyImpl createGame(String... known_board) {
 		assertNotNull(known_board);
 
@@ -46,21 +27,25 @@ public class WordyImplTest extends TestCase {
 	}
 	//</editor-fold>
 	
-	public void testScoreWordsCountsWordsThatAreBothValidAndInBoard() {
+	public void testScoreInvalidScoringWords() {
 		// 0
 		// Test a game that does nothing.
 		assertEquals(
 			0, createGame(
 				"----", 
-				"----",
-				"----", 
+				"-T--",
+				"A---", 
 				"---A"
 			).scoreWords(
 				"",
-				"A"
+				"A", 
+				"AT",
+				"ABCDEFGHIJKLMNOPQ"
 			)
 		);
-		
+	}
+	
+	public void testScoreWordsCountsWordsThatAreBothValidAndInBoard() {
 		// 2: "" and "ow" are both worth 0 points. "how" and "show" are each worth 1 point.
 		// A game with very few valid words.
 		assertEquals(
@@ -336,5 +321,143 @@ public class WordyImplTest extends TestCase {
 		);
 	}
 	
-	// Add your own test cases here
+	public void testScoreWordsWithAllLettersButNotAdjacent() {
+		// 0
+		assertEquals(
+			0, createGame(
+				"T-T-", 
+				"-E--",
+				"--S-", 
+				"----"
+			).scoreWords(
+				"what",
+				"a", 
+				"lovely", 
+				"test",
+				"this",
+				"is"
+			)
+		);
+	}
+	
+	public void testScoreWordsWithPunctuation() {
+		// 1: "test"
+		assertEquals(
+			1, createGame(
+				"T---", 
+				"-E--",
+				"--S-", 
+				"---T"
+			).scoreWords(
+				"test!", 
+				"test.",
+				"te.st", 
+				"test"
+			)
+		);
+	}
+	
+	public void testScoreWordsWithLettersAtBorder() {
+		// 11: "abbreviation"
+		assertEquals(
+			11, createGame(
+				"ABBR", 
+				"N--E",
+				"O--V", 
+				"ITAI"
+			).scoreWords(
+				"abbreviation"
+			)
+		);
+	}
+	
+	public void testScoreSameWordsWithDifferentBoards() {
+		final WordyImpl g1 = createGame(
+			"--e-", 
+			"-gm-",
+			"--a-", 
+			"----"
+		);
+		// 1: "game"
+		assertEquals(1, g1.scoreWords(
+			"game"
+		));
+		
+		final WordyImpl g2 = createGame(
+			"--d-", 
+			"-ac-",
+			"--b-", 
+			"----"
+		);
+		// 0
+		assertEquals(0, g2.scoreWords(
+			"game"
+		));
+	}
+	
+	public void testGameCaseInsensitive() {
+		final WordyImpl game = createGame(
+			"SeRs", 
+			"PAtg",
+			"line", 
+			"SERS"
+		);
+		assertEquals(6, game.scoreWords(
+			"aIr", 
+			"aisle", 
+			"ALE", 
+			"LAiR", 
+			"lane"
+		));
+	}
+	
+	public void testGameFidelityOverMultipleRuns() {
+		final int ATTEMPTS = 1000;
+		
+		final WordyImpl game = createGame(
+			"SERS", 
+			"PATG",
+			"LINE", 
+			"SERS"
+		);
+		
+		// Ensure that the game state doesn't get corrupted after attempting 
+		// multiple scores with the same board.
+		for(int i = 0; i < ATTEMPTS; ++i) {
+			assertEquals(6, game.scoreWords(
+				"air", 
+				"aisle", 
+				"ale", 
+				"lair", 
+				"lane"
+			));
+			assertEquals(3, game.scoreWords(
+				"tin", 
+				"traps"
+			));
+		}
+	}
+	
+	public void testScoreWithoutGeneratedBoard() {
+		final WordyImpl wordy = (WordyImpl)WordyImpl.createStandardGame();
+		assertNotNull(wordy);
+		
+		try {
+			wordy.scoreWords("test");
+			fail("Should have thrown IllegalArgumentException");
+		} catch(IllegalArgumentException e) {
+		}
+	}
+	
+	public void testScoreWithNullArguments() {
+		final WordyImpl wordy = (WordyImpl)WordyImpl.createStandardGame();
+		assertNotNull(wordy);
+		assertNotNull(wordy.generateNewBoard());
+		
+		try {
+			wordy.scoreWords((List<String>)null);
+			fail("Should have thrown IllegalArgumentException");
+		} catch(IllegalArgumentException e) {
+		}
+	}
 }

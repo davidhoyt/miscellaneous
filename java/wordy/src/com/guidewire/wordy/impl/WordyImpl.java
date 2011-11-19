@@ -35,9 +35,11 @@ import java.util.Set;
  *		Punctuation is considered to be part of a word.<br /><br />
  *	</li>
  *  <li>
- *		Tiles/cells can be reused across words.<br /><br />
+ *		Tiles/cells can be reused across words for scoring.<br /><br />
  *	</li>
  * </ol>
+ * 
+ * This class is NOT thread-safe.
  * 
  * @author David Hoyt <dhoyt@hoytsoft.org>
  */

@@ -347,6 +347,7 @@ public class ArgCheck {
    * @param argName   The name of the argument to be check. Used as part of the message for the IllegalArgumentException
    * @throws IllegalArgumentException if the test fails
    */
+  @SuppressWarnings("unchecked")
   public static void isAssignable(Class argClass, Class baseClass, String argName) {
     if (!baseClass.isAssignableFrom(argClass)) {
       throw new IllegalArgumentException("Argument \"" + argName + "\" must be a subclass or implementer of the class " + baseClass.getName());
