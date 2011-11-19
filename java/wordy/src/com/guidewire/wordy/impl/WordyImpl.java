@@ -23,20 +23,20 @@ import java.util.Set;
  *		The word list used in {@link WordyImpl#scoreWords(java.util.List)} 
  *		may actually contain a line consisting of multiple words 
  *		delineated by whitespace.<br /><br />
- *	</li>
+ *  </li>
  *  <li>
  *		Words are not longer than the maximum possible word size 
  *		(16 for a 4x4 board).<br /><br />
- *	</li>
+ *  </li>
  *  <li>
  *		Invalid words are automatically skipped.<br /><br />
- *	</li>
+ *  </li>
  *  <li>
  *		Punctuation is considered to be part of a word.<br /><br />
- *	</li>
+ *  </li>
  *  <li>
  *		Tiles/cells can be reused across words for scoring.<br /><br />
- *	</li>
+ *  </li>
  * </ol>
  * 
  * This class is NOT thread-safe.

@@ -86,21 +86,21 @@ public final class WordInBoardValidatorImpl implements IWordInBoardValidator {
 	 *		16 due to {@link IBoard#BOARD_CELLS}, our maximum depth should not exceed 
 	 *		15 since the caller will save us the trouble of finding valid starting points.
 	 *		<br /><br />
-	 *	</li>
+	 *  </li>
 	 *  <li>
 	 *		You could potentially eliminate many of the recursion issues through tail recursion 
 	 *		or a stack-based solution. But in terms of simplicity and being able to read and 
 	 *		understand the code, this one seemed best.<br /><br />
-	 *	</li>
+	 *  </li>
 	 *  <li>
 	 *		It recurses more than it has to. We could evaluate some of the conditions before 
 	 *		recursively calling the method and thus avoid unnecessary calls, but to better  
 	 *		understand the algorithm, this solution was chosen instead.<br /><br />
-	 *	</li>
+	 *  </li>
 	 *  <li>
 	 *		You could also use a bit array instead of a multidimensional boolean array. Again, 
 	 *		it was chosen for aesthetic and illustrative reasons only.
-	 *	</li>
+	 *  </li>
 	 * </ol>
 	 * 
 	 * @param x         The column of the board you want to look at next.
